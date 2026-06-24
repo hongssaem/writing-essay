@@ -5,81 +5,111 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>주장하는 글 쓰기 | 6학년 국어</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Malgun Gothic', '맑은 고딕', sans-serif; background: #f0f4f8; color: #222; min-height: 100vh; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Malgun Gothic', '맑은 고딕', sans-serif; background: #f0f4f8; color: #222; min-height: 100vh; }
 
-  .top-bar { background: #1a3a5c; color: white; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
-  .top-bar h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
-  .top-bar span { font-size: 13px; opacity: 0.75; }
+.top-bar { background: #1a3a5c; color: white; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+.top-bar h1 { font-size: 17px; font-weight: 700; }
+.top-bar span { font-size: 13px; opacity: 0.75; }
 
-  .container { max-width: 860px; margin: 0 auto; padding: 24px 16px 60px; }
+.container { max-width: 860px; margin: 0 auto; padding: 24px 16px 60px; }
 
-  /* 안내 카드 */
-  .guide-toggle { background: #e8f0fb; border: 1.5px solid #a8c4e8; border-radius: 10px; padding: 12px 18px; margin-bottom: 20px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
-  .guide-toggle span { font-size: 14px; color: #1a3a5c; font-weight: 700; }
-  .guide-toggle .arrow { font-size: 13px; color: #1a3a5c; transition: transform 0.2s; }
-  .guide-toggle.open .arrow { transform: rotate(180deg); }
-  .guide-body { background: white; border: 1.5px solid #a8c4e8; border-top: none; border-radius: 0 0 10px 10px; padding: 16px 18px; margin-top: -10px; margin-bottom: 20px; display: none; }
-  .guide-body.open { display: block; }
-  .guide-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-  .guide-section { border-radius: 8px; padding: 12px 14px; }
-  .guide-section.blue { background: #dbeafe; border-left: 4px solid #2563eb; }
-  .guide-section.green { background: #dcfce7; border-left: 4px solid #16a34a; }
-  .guide-section.purple { background: #ede9fe; border-left: 4px solid #7c3aed; }
-  .guide-section h3 { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
-  .guide-section.blue h3 { color: #1e40af; }
-  .guide-section.green h3 { color: #15803d; }
-  .guide-section.purple h3 { color: #6d28d9; }
-  .guide-section ul { padding-left: 14px; }
-  .guide-section ul li { font-size: 12px; line-height: 1.7; color: #333; }
+.guide-toggle { background: #e8f0fb; border: 1.5px solid #a8c4e8; border-radius: 10px; padding: 12px 18px; margin-bottom: 20px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+.guide-toggle span { font-size: 14px; color: #1a3a5c; font-weight: 700; }
+.guide-toggle .arrow { font-size: 13px; color: #1a3a5c; transition: transform 0.2s; }
+.guide-toggle.open .arrow { transform: rotate(180deg); }
+.guide-body { background: white; border: 1.5px solid #a8c4e8; border-top: none; border-radius: 0 0 10px 10px; padding: 16px 18px; margin-top: -10px; margin-bottom: 20px; display: none; }
+.guide-body.open { display: block; }
+.guide-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.guide-section { border-radius: 8px; padding: 12px 14px; }
+.guide-section.blue { background: #dbeafe; border-left: 4px solid #2563eb; }
+.guide-section.green { background: #dcfce7; border-left: 4px solid #16a34a; }
+.guide-section.purple { background: #ede9fe; border-left: 4px solid #7c3aed; }
+.guide-section h3 { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.guide-section.blue h3 { color: #1e40af; }
+.guide-section.green h3 { color: #15803d; }
+.guide-section.purple h3 { color: #6d28d9; }
+.guide-section ul { padding-left: 14px; }
+.guide-section ul li { font-size: 12px; line-height: 1.7; color: #333; }
 
-  /* 학생 정보 */
-  .info-card { background: white; border-radius: 12px; border: 1.5px solid #d1dae8; padding: 18px 22px; margin-bottom: 20px; }
-  .info-card h2 { font-size: 14px; font-weight: 700; color: #1a3a5c; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1.5px solid #e8eef5; }
-  .info-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-  .info-field label { display: block; font-size: 12px; color: #666; margin-bottom: 4px; font-weight: 600; }
-  .info-field input { width: 100%; border: 1.5px solid #d1dae8; border-radius: 7px; padding: 8px 12px; font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.2s; }
-  .info-field input:focus { border-color: #2563eb; }
+.info-card { background: white; border-radius: 12px; border: 1.5px solid #d1dae8; padding: 18px 22px; margin-bottom: 20px; }
+.info-card h2 { font-size: 14px; font-weight: 700; color: #1a3a5c; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1.5px solid #e8eef5; }
+.info-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.info-field label { display: block; font-size: 12px; color: #666; margin-bottom: 4px; font-weight: 600; }
+.info-field input { width: 100%; border: 1.5px solid #d1dae8; border-radius: 7px; padding: 8px 12px; font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.2s; }
+.info-field input:focus { border-color: #2563eb; }
 
-  /* 글쓰기 섹션 */
-  .section-card { background: white; border-radius: 12px; border: 1.5px solid #d1dae8; margin-bottom: 16px; overflow: hidden; }
-  .section-header { padding: 13px 20px; display: flex; align-items: center; gap: 10px; }
-  .section-header.blue { background: #1d4ed8; }
-  .section-header.green { background: #15803d; }
-  .section-header.purple { background: #6d28d9; }
-  .section-badge { background: rgba(255,255,255,0.25); color: white; font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
-  .section-title { color: white; font-size: 15px; font-weight: 700; }
-  .section-hint { color: rgba(255,255,255,0.8); font-size: 12px; margin-left: auto; }
-  .section-body { padding: 16px 20px; }
+.section-card { background: white; border-radius: 12px; border: 1.5px solid #d1dae8; margin-bottom: 16px; overflow: hidden; }
+.section-header { padding: 13px 20px; display: flex; align-items: center; gap: 10px; }
+.section-header.blue { background: #1d4ed8; }
+.section-header.green { background: #15803d; }
+.section-header.purple { background: #6d28d9; }
+.section-badge { background: rgba(255,255,255,0.25); color: white; font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+.section-title { color: white; font-size: 15px; font-weight: 700; }
+.section-hint { color: rgba(255,255,255,0.8); font-size: 12px; margin-left: auto; }
+.section-body { padding: 16px 20px; }
 
-  .sub-label { font-size: 12px; font-weight: 700; color: #555; margin-bottom: 5px; margin-top: 12px; }
-  .sub-label:first-child { margin-top: 0; }
-  textarea { width: 100%; border: 1.5px solid #d1dae8; border-radius: 8px; padding: 10px 13px; font-size: 14px; font-family: inherit; line-height: 1.8; resize: vertical; outline: none; transition: border-color 0.2s; background: #fafbfc; }
-  textarea:focus { border-color: #2563eb; background: white; }
-  .char-count { text-align: right; font-size: 11px; color: #aaa; margin-top: 3px; }
+.sub-label { font-size: 12px; font-weight: 700; color: #555; margin-bottom: 5px; margin-top: 12px; }
+.sub-label:first-child { margin-top: 0; }
+textarea { width: 100%; border: 1.5px solid #d1dae8; border-radius: 8px; padding: 10px 13px; font-size: 14px; font-family: inherit; line-height: 1.8; resize: vertical; outline: none; transition: border-color 0.2s; background: #fafbfc; }
+textarea:focus { border-color: #2563eb; background: white; }
+.char-count { text-align: right; font-size: 11px; color: #aaa; margin-top: 3px; }
+.claim-input { width: 100%; border: 2px solid #2563eb; border-radius: 8px; padding: 10px 13px; font-size: 14px; font-family: inherit; outline: none; background: #eff6ff; }
+.claim-input:focus { background: white; }
 
-  /* 주장 한 문장 강조 */
-  .claim-input { width: 100%; border: 2px solid #2563eb; border-radius: 8px; padding: 10px 13px; font-size: 14px; font-family: inherit; outline: none; background: #eff6ff; }
-  .claim-input:focus { background: white; }
+.progress-bar-wrap { background: #e5e7eb; border-radius: 99px; height: 6px; margin: 18px 0 6px; overflow: hidden; }
+.progress-bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #2563eb, #7c3aed); transition: width 0.4s; }
+.progress-label { font-size: 12px; color: #888; text-align: right; }
 
-  /* 진행 상태 */
-  .progress-bar-wrap { background: #e5e7eb; border-radius: 99px; height: 6px; margin: 18px 0 6px; overflow: hidden; }
-  .progress-bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #2563eb, #7c3aed); transition: width 0.4s; }
-  .progress-label { font-size: 12px; color: #888; text-align: right; }
+.submit-area { background: white; border-radius: 12px; border: 1.5px solid #d1dae8; padding: 20px 22px; }
+.submit-area p { font-size: 13px; color: #666; margin-bottom: 16px; line-height: 1.6; text-align: center; }
+.btn-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn-pdf { background: #dc2626; color: white; border: none; border-radius: 9px; padding: 13px 32px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+.btn-pdf:hover { background: #b91c1c; }
+.btn-json { background: #1a3a5c; color: white; border: none; border-radius: 9px; padding: 13px 32px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+.btn-json:hover { background: #2563eb; }
+.btn-pdf:disabled, .btn-json:disabled { background: #9ca3af; cursor: not-allowed; }
+.warn { background: #fff7ed; border: 1.5px solid #fed7aa; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #c2410c; margin-top: 12px; display: none; text-align: center; }
+.btn-hint { font-size: 11px; color: #888; text-align: center; margin-top: 10px; }
 
-  /* 제출 버튼 */
-  .submit-area { background: white; border-radius: 12px; border: 1.5px solid #d1dae8; padding: 20px 22px; text-align: center; }
-  .submit-area p { font-size: 13px; color: #666; margin-bottom: 14px; line-height: 1.6; }
-  .btn-submit { background: #1a3a5c; color: white; border: none; border-radius: 9px; padding: 13px 40px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.2s; font-family: inherit; }
-  .btn-submit:hover { background: #2563eb; }
-  .btn-submit:disabled { background: #9ca3af; cursor: not-allowed; }
+/* ── 인쇄(PDF) 전용 스타일 ── */
+@media print {
+  * { box-sizing: border-box; }
+  body { background: white; font-family: 'Malgun Gothic', '맑은 고딕', sans-serif; color: #111; font-size: 11pt; }
+  .top-bar, .guide-toggle, .guide-body, .progress-bar-wrap, .progress-label, .submit-area, .char-count, .sub-label { display: none !important; }
 
-  .warn { background: #fff7ed; border: 1.5px solid #fed7aa; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #c2410c; margin-top: 12px; display: none; }
+  .container { max-width: 100%; padding: 0; margin: 0; }
 
-  @media (max-width: 600px) {
-    .info-row { grid-template-columns: 1fr 1fr; }
-    .guide-row { grid-template-columns: 1fr; }
-  }
+  /* 인쇄용 헤더 */
+  .print-header { display: block !important; border-bottom: 2.5px solid #1a3a5c; padding-bottom: 10px; margin-bottom: 16px; }
+  .print-header .ph-title { font-size: 17pt; font-weight: 700; color: #1a3a5c; }
+  .print-header .ph-sub { font-size: 10pt; color: #555; margin-top: 3px; }
+  .print-header .ph-info { display: flex; gap: 24px; margin-top: 8px; font-size: 10pt; }
+  .print-header .ph-info span { border-bottom: 1px solid #aaa; min-width: 120px; padding-bottom: 2px; }
+
+  .info-card { display: none !important; }
+
+  .section-card { border: 1px solid #ccc; border-radius: 0; margin-bottom: 12px; break-inside: avoid; page-break-inside: avoid; }
+  .section-header { padding: 7px 14px; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .section-header.blue { background: #1d4ed8 !important; }
+  .section-header.green { background: #15803d !important; }
+  .section-header.purple { background: #6d28d9 !important; }
+  .section-badge { font-size: 10pt; }
+  .section-title { font-size: 11pt; }
+  .section-hint { display: none; }
+  .section-body { padding: 10px 14px; }
+
+  textarea, .claim-input { border: none; background: transparent; padding: 0; font-size: 11pt; line-height: 1.9; resize: none; width: 100%; color: #111; }
+  .claim-input { font-weight: 700; color: #1d4ed8; }
+
+  .print-divider { display: block !important; border: none; border-top: 1px dashed #ccc; margin: 6px 0; }
+
+  @page { size: A4; margin: 18mm 16mm; }
+}
+
+/* 화면에서 숨길 요소 */
+.print-header { display: none; }
+.print-divider { display: none; }
 </style>
 </head>
 <body>
@@ -91,11 +121,21 @@
 
 <div class="container">
 
-  <!-- 진행률 -->
+  <!-- 인쇄 전용 헤더 (화면에서는 숨김) -->
+  <div class="print-header">
+    <div class="ph-title">주장하는 글쓰기</div>
+    <div class="ph-sub">서울송전초등학교 6학년 4반 · 2026학년도 국어 5단원</div>
+    <div class="ph-info">
+      <span id="p-name">이름: </span>
+      <span id="p-num">번호: </span>
+      <span id="p-date">날짜: </span>
+      <span id="p-topic">주제: </span>
+    </div>
+  </div>
+
   <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
   <div class="progress-label" id="progressLabel">0 / 6 완성</div>
 
-  <!-- 글쓰기 안내 토글 -->
   <div class="guide-toggle" id="guideToggle" onclick="toggleGuide()">
     <span>📖 글쓰기 안내 보기 (클릭해서 열기/닫기)</span>
     <span class="arrow">▼</span>
@@ -132,13 +172,12 @@
     </div>
   </div>
 
-  <!-- 학생 정보 -->
   <div class="info-card">
     <h2>학생 정보</h2>
     <div class="info-row">
-      <div class="info-field"><label>이름</label><input type="text" id="name" placeholder="홍길동" oninput="updateProgress()"></div>
-      <div class="info-field"><label>번호</label><input type="text" id="num" placeholder="15" oninput="updateProgress()"></div>
-      <div class="info-field"><label>글 주제 (주장할 내용)</label><input type="text" id="topic" placeholder="예) 학교 급식 잔반을 줄여야 한다" oninput="updateProgress()"></div>
+      <div class="info-field"><label>이름</label><input type="text" id="name" placeholder="홍길동" oninput="updateProgress(); syncPrint()"></div>
+      <div class="info-field"><label>번호</label><input type="text" id="num" placeholder="15" oninput="updateProgress(); syncPrint()"></div>
+      <div class="info-field"><label>글 주제</label><input type="text" id="topic" placeholder="예) 학교 급식 잔반을 줄여야 한다" oninput="updateProgress(); syncPrint()"></div>
     </div>
   </div>
 
@@ -150,10 +189,10 @@
       <span class="section-hint">3~4문장</span>
     </div>
     <div class="section-body">
-      <div class="sub-label">① 문제 상황 — 요즘 우리 주변에서 볼 수 있는 문제나 현상을 구체적으로 써요.</div>
-      <textarea id="intro1" rows="3" placeholder="예) 요즘 학교 급식에서 음식을 남기는 학생들이 많아졌습니다. 매일 수십 킬로그램의 음식이 버려지고 있습니다." oninput="updateProgress(); countChars('intro1','cnt1')"></textarea>
+      <div class="sub-label">① 문제 상황 — 요즘 우리 주변의 문제나 현상을 구체적으로 써요.</div>
+      <textarea id="intro1" rows="3" placeholder="예) 요즘 학교 급식에서 음식을 남기는 학생들이 많아졌습니다..." oninput="updateProgress(); countChars('intro1','cnt1')"></textarea>
       <div class="char-count" id="cnt1">0자</div>
-
+      <hr class="print-divider">
       <div class="sub-label">② 주장 한 문장 — "나는 ~해야 한다고 생각합니다." 형식으로 딱 한 문장만 써요.</div>
       <input type="text" class="claim-input" id="intro2" placeholder="나는 학교 급식 잔반을 줄이기 위한 교육이 필요하다고 생각합니다." oninput="updateProgress()">
     </div>
@@ -167,16 +206,16 @@
       <span class="section-hint">근거 하나당 4~6문장</span>
     </div>
     <div class="section-body">
-      <div class="sub-label">【근거 1】 첫 번째 이유와 예시를 써요. (첫째, ~합니다. / 왜냐하면 ~이기 때문입니다. / 실제로 ~.)</div>
-      <textarea id="body1" rows="5" placeholder="첫째, 음식 낭비는 환경에 큰 피해를 줍니다. 버려진 음식은 썩으면서 온실가스를 만들어 기후 변화의 원인이 됩니다. 실제로 우리나라에서 하루에 버려지는 음식물 쓰레기는 약 1만 5천 톤에 달한다고 합니다." oninput="updateProgress(); countChars('body1','cnt2')"></textarea>
+      <div class="sub-label">【근거 1】 첫 번째 이유와 예시를 써요.</div>
+      <textarea id="body1" rows="5" placeholder="첫째, 음식 낭비는 환경에 큰 피해를 줍니다..." oninput="updateProgress(); countChars('body1','cnt2')"></textarea>
       <div class="char-count" id="cnt2">0자</div>
-
-      <div class="sub-label">【근거 2】 두 번째 이유와 예시를 써요. (둘째, ~합니다. / 또한 ~)</div>
-      <textarea id="body2" rows="5" placeholder="둘째, 음식을 남기는 것은 많은 사람들의 노력을 낭비하는 일입니다. 농부들이 정성껏 키운 식재료와 조리사 선생님의 수고가 모두 쓰레기통으로 들어갑니다." oninput="updateProgress(); countChars('body2','cnt3')"></textarea>
+      <hr class="print-divider">
+      <div class="sub-label">【근거 2】 두 번째 이유와 예시를 써요.</div>
+      <textarea id="body2" rows="5" placeholder="둘째, 음식을 남기는 것은 많은 사람들의 노력을 낭비하는 일입니다..." oninput="updateProgress(); countChars('body2','cnt3')"></textarea>
       <div class="char-count" id="cnt3">0자</div>
-
-      <div class="sub-label">【근거 3】 (선택) 반대 의견을 소개하고 반박해 봐요. (일부에서는 ~라고 말합니다. 그러나 ~이므로 ~.)</div>
-      <textarea id="body3" rows="4" placeholder="일부에서는 아이들이 먹기 싫은 음식을 억지로 먹이는 것은 옳지 않다고 말합니다. 그러나 잔반 줄이기 교육은 강제로 먹이는 것이 아니라, 음식의 소중함을 깨닫게 하는 활동입니다." oninput="updateProgress(); countChars('body3','cnt4')"></textarea>
+      <hr class="print-divider">
+      <div class="sub-label">【근거 3】 (선택) 반대 의견을 소개하고 반박해 봐요.</div>
+      <textarea id="body3" rows="4" placeholder="일부에서는 ~라고 말합니다. 그러나 ~이므로 ~." oninput="updateProgress(); countChars('body3','cnt4')"></textarea>
       <div class="char-count" id="cnt4">0자</div>
     </div>
   </div>
@@ -190,16 +229,21 @@
     </div>
     <div class="section-body">
       <div class="sub-label">본론 요약 + 주장 재강조 + 독자에게 행동 촉구 — 새로운 근거는 쓰지 않아요!</div>
-      <textarea id="conclusion" rows="5" placeholder="이처럼 급식 잔반 문제는 환경과 모두의 노력을 생각할 때 반드시 해결해야 할 과제입니다. 따라서 학교에서 음식의 소중함을 알려주는 교육이 꼭 필요합니다. 우리 모두가 한 숟가락씩 덜 남기는 작은 실천으로 큰 변화를 만들어 나갑시다." oninput="updateProgress(); countChars('conclusion','cnt5')"></textarea>
+      <textarea id="conclusion" rows="5" placeholder="이처럼 급식 잔반 문제는... 따라서... 우리 모두가..." oninput="updateProgress(); countChars('conclusion','cnt5')"></textarea>
       <div class="char-count" id="cnt5">0자</div>
     </div>
   </div>
 
-  <!-- 제출 -->
+  <!-- 제출 버튼 -->
   <div class="submit-area">
-    <p>글을 다 썼으면 아래 버튼을 눌러 파일을 저장하세요.<br>저장된 파일을 <strong>선생님께 전달</strong>하면 채점 후 결과를 알려드립니다.</p>
-    <button class="btn-submit" id="btnSubmit" onclick="submitWork()">💾 완성! 파일 저장하기</button>
+    <p>글을 다 썼으면 두 가지 모두 저장하세요!<br>
+    <strong>📄 PDF</strong> → 게시판·문집용 / <strong>💾 JSON</strong> → 선생님 채점용</p>
+    <div class="btn-row">
+      <button class="btn-pdf" id="btnPdf" onclick="savePdf()">📄 PDF로 저장 (게시용)</button>
+      <button class="btn-json" id="btnJson" onclick="saveJson()">💾 JSON 저장 (채점용)</button>
+    </div>
     <div class="warn" id="warnMsg">⚠️ 이름, 번호, 주제, 서론, 본론(근거1·2), 결론을 모두 작성해야 저장할 수 있어요!</div>
+    <div class="btn-hint" id="saveHint"></div>
   </div>
 
 </div>
@@ -213,8 +257,7 @@ function toggleGuide() {
 }
 
 function countChars(id, countId) {
-  const val = document.getElementById(id).value;
-  document.getElementById(countId).textContent = val.length + '자';
+  document.getElementById(countId).textContent = document.getElementById(id).value.length + '자';
 }
 
 function isOk(id) {
@@ -229,10 +272,44 @@ function updateProgress() {
   document.getElementById('progressLabel').textContent = done + ' / ' + fields.length + ' 완성 (' + pct + '%)';
 }
 
-function submitWork() {
+function syncPrint() {
+  const name = document.getElementById('name').value || '';
+  const num  = document.getElementById('num').value || '';
+  const topic = document.getElementById('topic').value || '';
+  const now = new Date().toLocaleDateString('ko-KR');
+  document.getElementById('p-name').textContent  = '이름: ' + name;
+  document.getElementById('p-num').textContent   = '번호: ' + num + '번';
+  document.getElementById('p-date').textContent  = '날짜: ' + now;
+  document.getElementById('p-topic').textContent = '주제: ' + topic;
+}
+
+function checkRequired() {
   const required = ['name','num','topic','intro2','body1','body2','conclusion'];
-  const missing = required.filter(f => !isOk(f));
-  if (missing.length > 0) {
+  return required.filter(f => !isOk(f)).length === 0;
+}
+
+function savePdf() {
+  if (!checkRequired()) {
+    document.getElementById('warnMsg').style.display = 'block';
+    return;
+  }
+  document.getElementById('warnMsg').style.display = 'none';
+  syncPrint();
+
+  // 인쇄 전 textarea 높이 자동 맞춤
+  document.querySelectorAll('textarea').forEach(ta => {
+    ta.style.height = 'auto';
+    ta.style.height = ta.scrollHeight + 'px';
+  });
+
+  setTimeout(() => {
+    window.print();
+    document.getElementById('saveHint').textContent = '💡 인쇄 창에서 "PDF로 저장" 또는 "다른 이름으로 저장"을 선택하세요!';
+  }, 100);
+}
+
+function saveJson() {
+  if (!checkRequired()) {
     document.getElementById('warnMsg').style.display = 'block';
     return;
   }
@@ -263,17 +340,15 @@ function submitWork() {
   a.click();
   URL.revokeObjectURL(a.href);
 
-  document.getElementById('btnSubmit').textContent = '✅ 저장 완료! 선생님께 파일을 보내세요.';
-  document.getElementById('btnSubmit').disabled = true;
-  document.getElementById('btnSubmit').style.background = '#15803d';
+  document.getElementById('saveHint').textContent = '✅ JSON 저장 완료! 선생님께 파일을 보내주세요.';
+  document.getElementById('btnJson').textContent = '✅ 저장 완료!';
+  document.getElementById('btnJson').style.background = '#15803d';
 }
 
-['intro1','intro2','body1','body2','body3','conclusion'].forEach(id => {
-  const el = document.getElementById(id);
+['intro1','body1','body2','body3','conclusion'].forEach(id => {
   const cntMap = { intro1:'cnt1', body1:'cnt2', body2:'cnt3', body3:'cnt4', conclusion:'cnt5' };
-  if (el && cntMap[id]) {
-    el.addEventListener('input', () => countChars(id, cntMap[id]));
-  }
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', () => countChars(id, cntMap[id]));
 });
 </script>
 </body>
