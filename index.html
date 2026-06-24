@@ -296,16 +296,21 @@ function savePdf() {
   document.getElementById('warnMsg').style.display = 'none';
   syncPrint();
 
+  const name  = document.getElementById('name').value.trim();
+  const num   = document.getElementById('num').value.trim();
+  const fname = '주장하는글_' + name + '_' + num + '번';
+
+  // 파일명 안내 표시
+  const hint = document.getElementById('saveHint');
+  hint.innerHTML = '📄 인쇄 창이 열리면 <strong style="color:#dc2626">PDF로 저장</strong> 선택 후, 파일명을 <strong style="color:#1d4ed8">' + fname + '</strong> 으로 저장하세요!';
+
   // 인쇄 전 textarea 높이 자동 맞춤
   document.querySelectorAll('textarea').forEach(ta => {
     ta.style.height = 'auto';
     ta.style.height = ta.scrollHeight + 'px';
   });
 
-  setTimeout(() => {
-    window.print();
-    document.getElementById('saveHint').textContent = '💡 인쇄 창에서 "PDF로 저장" 또는 "다른 이름으로 저장"을 선택하세요!';
-  }, 100);
+  setTimeout(() => window.print(), 200);
 }
 
 function saveJson() {
