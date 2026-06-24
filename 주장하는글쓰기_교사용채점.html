@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>교사용 채점 | 주장하는 글쓰기</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Malgun Gothic', '맑은 고딕', sans-serif; background: #f0f4f8; color: #222; min-height: 100vh; }
+
+.top-bar { background: #7c2d12; color: white; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+.top-bar h1 { font-size: 17px; font-weight: 700; }
+.top-bar span { font-size: 13px; opacity: 0.75; }
+
+.container { max-width: 920px; margin: 0 auto; padding: 28px 16px 60px; }
+
+/* 업로드 존 */
+.upload-zone { background: white; border: 2.5px dashed #f97316; border-radius: 14px; padding: 40px 20px; text-align: center; margin-bottom: 28px; cursor: pointer; transition: background 0.2s; }
+.upload-zone:hover { background: #fff7ed; }
+.upload-zone h2 { font-size: 16px; color: #c2410c; margin-bottom: 8px; }
+.upload-zone p { font-size: 13px; color: #888; }
+.upload-zone input { display: none; }
+.btn-upload { display: inline-block; margin-top: 14px; background: #ea580c; color: white; border: none; border-radius: 8px; padding: 10px 28px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
+
+/* 학생 글 보기 */
+.student-info-bar { background: #1a3a5c; color: white; border-radius: 10px 10px 0 0; padding: 12px 20px; display: flex; gap: 20px; align-items: center; }
+.student-info-bar .name { font-size: 17px; font-weight: 700; }
+.student-info-bar .meta { font-size: 13px; opacity: 0.8; }
+.student-info-bar .topic-pill { background: rgba(255,255,255,0.2); padding: 3px 12px; border-radius: 20px; font-size: 13px; margin-left: auto; }
+
+.writing-display { background: white; border: 1.5px solid #d1dae8; border-top: none; border-radius: 0 0 10px 10px; padding: 20px 24px; margin-bottom: 24px; }
+.writing-section { margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px dashed #e5e7eb; }
+.writing-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.ws-label { font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 20px; display: inline-block; margin-bottom: 8px; }
+.ws-label.blue { background: #dbeafe; color: #1e40af; }
+.ws-label.green { background: #dcfce7; color: #15803d; }
+.ws-label.purple { background: #ede9fe; color: #6d28d9; }
+.ws-text { font-size: 14px; line-height: 1.9; color: #333; background: #fafafa; border-left: 3px solid #d1d5db; padding: 10px 14px; border-radius: 0 6px 6px 0; white-space: pre-wrap; }
+.ws-text.claim { border-left-color: #2563eb; background: #eff6ff; font-weight: 600; }
+
+/* 채점 테이블 */
+.score-card { background: white; border: 1.5px solid #d1dae8; border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+.score-card-header { background: #7c2d12; color: white; padding: 12px 20px; font-size: 15px; font-weight: 700; }
+table.score-table { width: 100%; border-collapse: collapse; }
+table.score-table th { background: #fef3c7; font-size: 12px; font-weight: 700; padding: 10px 12px; border-bottom: 1.5px solid #d1dae8; text-align: center; color: #78350f; }
+table.score-table td { padding: 10px 12px; border-bottom: 1px solid #f3f4f6; font-size: 13px; vertical-align: middle; }
+table.score-table tr:last-child td { border-bottom: none; }
+.area-name { font-weight: 700; color: #374151; }
+.eval-desc { color: #555; line-height: 1.5; }
+
+.radio-group { display: flex; gap: 6px; justify-content: center; }
+.radio-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
+.radio-btn input[type=radio] { display: none; }
+.radio-label { font-size: 11px; color: #888; }
+.radio-dot { width: 32px; height: 32px; border-radius: 50%; border: 2px solid #d1dae8; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; transition: all 0.15s; color: #aaa; }
+.radio-btn input:checked + .radio-dot { border-color: transparent; color: white; }
+.radio-btn.s20 input:checked + .radio-dot { background: #15803d; border-color: #15803d; }
+.radio-btn.s15 input:checked + .radio-dot { background: #2563eb; border-color: #2563eb; }
+.radio-btn.s10 input:checked + .radio-dot { background: #d97706; border-color: #d97706; }
+.radio-btn.s5  input:checked + .radio-dot { background: #dc2626; border-color: #dc2626; }
+
+/* 점수 합산 */
+.total-area { background: #1a3a5c; color: white; border-radius: 12px; padding: 20px 28px; margin-bottom: 24px; display: flex; align-items: center; gap: 24px; }
+.total-score-num { font-size: 52px; font-weight: 900; line-height: 1; color: #fbbf24; }
+.total-score-num span { font-size: 20px; font-weight: 400; color: rgba(255,255,255,0.6); }
+.total-grade { font-size: 28px; font-weight: 700; }
+.total-grade-sub { font-size: 14px; opacity: 0.75; margin-top: 4px; }
+.score-breakdown { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; flex: 1; }
+.sb-item { background: rgba(255,255,255,0.1); border-radius: 8px; padding: 8px; text-align: center; }
+.sb-item .sb-area { font-size: 11px; opacity: 0.7; margin-bottom: 3px; }
+.sb-item .sb-score { font-size: 18px; font-weight: 700; color: #fbbf24; }
+.sb-item .sb-max { font-size: 11px; opacity: 0.5; }
+
+/* 해석 카드 */
+.interp-card { background: white; border: 1.5px solid #d1dae8; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; }
+.interp-card h3 { font-size: 15px; font-weight: 700; color: #1a3a5c; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1.5px solid #e5e7eb; }
+.interp-comment { font-size: 14px; line-height: 1.9; color: #333; background: #f8fafc; border-radius: 8px; padding: 14px 18px; margin-bottom: 12px; }
+.strengths { border-left: 4px solid #15803d; }
+.improvements { border-left: 4px solid #d97706; }
+.feedback-box { border: 1.5px solid #d1dae8; border-radius: 8px; width: 100%; min-height: 80px; padding: 12px; font-size: 13px; font-family: inherit; line-height: 1.7; resize: vertical; outline: none; }
+.feedback-box:focus { border-color: #2563eb; }
+
+/* 등급 배지 */
+.grade-badge { display: inline-block; padding: 4px 16px; border-radius: 20px; font-weight: 700; font-size: 15px; }
+.grade-A { background: #dcfce7; color: #15803d; }
+.grade-B { background: #dbeafe; color: #1d4ed8; }
+.grade-C { background: #fef3c7; color: #92400e; }
+.grade-D { background: #fee2e2; color: #991b1b; }
+
+/* 인쇄 버튼 */
+.action-bar { display: flex; gap: 12px; margin-bottom: 24px; }
+.btn-print { background: #1a3a5c; color: white; border: none; border-radius: 9px; padding: 12px 28px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.btn-print:hover { background: #2563eb; }
+.btn-reset { background: white; color: #dc2626; border: 1.5px solid #dc2626; border-radius: 9px; padding: 12px 20px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.btn-reset:hover { background: #fee2e2; }
+
+#scoring-section { display: none; }
+
+/* 인쇄 스타일 */
+@media print {
+  body { background: white; }
+  .top-bar, .upload-zone, .action-bar, .btn-print, .btn-reset, .feedback-box { display: none !important; }
+  .container { padding: 0; max-width: 100%; }
+  .score-card, .interp-card, .writing-display, .total-area { break-inside: avoid; }
+  .radio-dot { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .total-area { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>🏫 교사용 채점 페이지 — 주장하는 글쓰기</h1>
+  <span>서울송전초등학교 6학년 4반</span>
+</div>
+
+<div class="container">
+
+  <!-- 파일 업로드 -->
+  <div class="upload-zone" id="dropZone" onclick="document.getElementById('fileInput').click()" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
+    <h2>📂 학생 파일을 올려주세요</h2>
+    <p>학생이 저장한 <strong>.json</strong> 파일을 클릭하거나 끌어다 놓으세요</p>
+    <button class="btn-upload" onclick="event.stopPropagation(); document.getElementById('fileInput').click()">파일 선택하기</button>
+    <input type="file" id="fileInput" accept=".json" onchange="loadFile(event)">
+  </div>
+
+  <!-- 채점 영역 (파일 올리면 표시) -->
+  <div id="scoring-section">
+
+    <!-- 학생 글 보기 -->
+    <div class="student-info-bar">
+      <span class="name" id="dispName"></span>
+      <span class="meta" id="dispMeta"></span>
+      <span class="topic-pill" id="dispTopic"></span>
+    </div>
+    <div class="writing-display">
+      <div class="writing-section">
+        <span class="ws-label blue">서론 — 문제 상황</span>
+        <div class="ws-text" id="wIntroSit"></div>
+      </div>
+      <div class="writing-section">
+        <span class="ws-label blue">서론 — 주장 (핵심 문장)</span>
+        <div class="ws-text claim" id="wIntroClaim"></div>
+      </div>
+      <div class="writing-section">
+        <span class="ws-label green">본론 — 근거 1</span>
+        <div class="ws-text" id="wBody1"></div>
+      </div>
+      <div class="writing-section">
+        <span class="ws-label green">본론 — 근거 2</span>
+        <div class="ws-text" id="wBody2"></div>
+      </div>
+      <div class="writing-section" id="body3Sec">
+        <span class="ws-label green">본론 — 근거 3 (반박)</span>
+        <div class="ws-text" id="wBody3"></div>
+      </div>
+      <div class="writing-section">
+        <span class="ws-label purple">결론</span>
+        <div class="ws-text" id="wConclusion"></div>
+      </div>
+    </div>
+
+    <!-- 채점 테이블 -->
+    <div class="score-card">
+      <div class="score-card-header">📊 영역별 채점 (100점 만점)</div>
+      <table class="score-table">
+        <thead>
+          <tr>
+            <th style="width:100px">영역</th>
+            <th>평가 내용</th>
+            <th style="width:180px">점수 선택</th>
+          </tr>
+        </thead>
+        <tbody id="scoreTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- 총점 -->
+    <div class="total-area" id="totalArea">
+      <div>
+        <div style="font-size:14px; opacity:0.7; margin-bottom:4px">총점</div>
+        <div class="total-score-num"><span id="totalScore">0</span><span>점</span></div>
+        <div class="total-grade" id="totalGrade">-</div>
+        <div class="total-grade-sub" id="totalGradeSub">점수를 입력하세요</div>
+      </div>
+      <div class="score-breakdown" id="scoreBreakdown"></div>
+    </div>
+
+    <!-- 해석지 -->
+    <div class="interp-card" id="interpCard">
+      <h3>📋 채점 해석지</h3>
+      <div id="interpContent"></div>
+      <div style="margin-top:16px">
+        <div style="font-size:13px; font-weight:700; margin-bottom:6px; color:#1a3a5c">✏️ 교사 추가 의견 (선택)</div>
+        <textarea class="feedback-box" id="teacherComment" placeholder="학생에게 전달할 추가 피드백을 입력하세요..."></textarea>
+      </div>
+    </div>
+
+    <!-- 액션 버튼 -->
+    <div class="action-bar">
+      <button class="btn-print" onclick="printResult()">🖨️ 해석지 인쇄하기</button>
+      <button class="btn-reset" onclick="resetAll()">↩️ 다른 학생 채점하기</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const CRITERIA = [
+  { id:'c1', area:'서론', weight:20, desc:'문제 상황이 구체적으로 제시되고, 주장이 한 문장으로 명확하게 드러난다.', scores:[
+    { val:20, label:'20', tip:'문제 상황과 주장 모두 명확' },
+    { val:15, label:'15', tip:'하나가 다소 부족' },
+    { val:10, label:'10', tip:'둘 다 약함' },
+    { val:5,  label:'5',  tip:'거의 없음' }
+  ]},
+  { id:'c2', area:'본론①', weight:25, desc:'근거가 2개 이상이며, 각 근거마다 이유와 예시(자료)가 함께 제시된다.', scores:[
+    { val:25, label:'25', tip:'근거 2개↑ + 이유·예시 모두' },
+    { val:18, label:'18', tip:'근거 있으나 이유·예시 부족' },
+    { val:12, label:'12', tip:'근거 1개 or 단순 나열' },
+    { val:5,  label:'5',  tip:'거의 없음' }
+  ]},
+  { id:'c3', area:'본론②', weight:25, desc:'근거가 주장과 논리적으로 연결되고, 사실에 바탕을 두고 있다.', scores:[
+    { val:25, label:'25', tip:'연결 명확 + 사실적 근거' },
+    { val:18, label:'18', tip:'연결되나 일부 비약' },
+    { val:12, label:'12', tip:'연결 불명확 or 의견 의존' },
+    { val:5,  label:'5',  tip:'거의 없음' }
+  ]},
+  { id:'c4', area:'결론', weight:20, desc:'본론 요약 + 주장 재강조 + 행동 촉구가 모두 포함되어 있다.', scores:[
+    { val:20, label:'20', tip:'요약·재강조·촉구 모두' },
+    { val:15, label:'15', tip:'2가지 포함' },
+    { val:10, label:'10', tip:'1가지만' },
+    { val:5,  label:'5',  tip:'거의 없음' }
+  ]},
+  { id:'c5', area:'표현', weight:10, desc:'논리적 어휘를 사용하고, 문단 사이에 연결어를 적절히 활용했다.', scores:[
+    { val:10, label:'10', tip:'논리 어휘 + 연결어 모두' },
+    { val:7,  label:'7',  tip:'하나 부족' },
+    { val:4,  label:'4',  tip:'둘 다 부족' },
+    { val:1,  label:'1',  tip:'거의 없음' }
+  ]},
+];
+
+let currentData = null;
+
+function handleDrop(e) {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file) parseFile(file);
+}
+function loadFile(e) {
+  const file = e.target.files[0];
+  if (file) parseFile(file);
+}
+function parseFile(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      currentData = data;
+      renderStudentData(data);
+      document.getElementById('scoring-section').style.display = 'block';
+      document.getElementById('dropZone').style.display = 'none';
+      document.getElementById('scoring-section').scrollIntoView({ behavior:'smooth' });
+    } catch(err) {
+      alert('파일을 읽을 수 없습니다. 올바른 학생 파일인지 확인하세요.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function renderStudentData(data) {
+  const s = data.student, w = data.writing;
+  document.getElementById('dispName').textContent = s.name;
+  document.getElementById('dispMeta').textContent = s.number + '번  |  ' + data.submittedAt;
+  document.getElementById('dispTopic').textContent = '📌 ' + s.topic;
+  document.getElementById('wIntroSit').textContent = w.intro_situation || '(미작성)';
+  document.getElementById('wIntroClaim').textContent = w.intro_claim || '(미작성)';
+  document.getElementById('wBody1').textContent = w.body_reason1 || '(미작성)';
+  document.getElementById('wBody2').textContent = w.body_reason2 || '(미작성)';
+  if (w.body_reason3) {
+    document.getElementById('wBody3').textContent = w.body_reason3;
+    document.getElementById('body3Sec').style.display = 'block';
+  } else {
+    document.getElementById('body3Sec').style.display = 'none';
+  }
+  document.getElementById('wConclusion').textContent = w.conclusion || '(미작성)';
+
+  buildScoreTable();
+}
+
+function buildScoreTable() {
+  const tbody = document.getElementById('scoreTableBody');
+  tbody.innerHTML = '';
+  CRITERIA.forEach(c => {
+    const tr = document.createElement('tr');
+    const radios = c.scores.map((s, i) => {
+      const cls = ['s20','s15','s10','s5'][i];
+      return `<label class="radio-btn ${cls}">
+        <input type="radio" name="${c.id}" value="${s.val}" onchange="calcTotal()">
+        <div class="radio-dot">${s.label}</div>
+        <span class="radio-label">${s.tip}</span>
+      </label>`;
+    }).join('');
+    tr.innerHTML = `
+      <td class="area-name">${c.area}<br><small style="font-weight:400;color:#888">/${c.weight}점</small></td>
+      <td class="eval-desc">${c.desc}</td>
+      <td><div class="radio-group">${radios}</div></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function calcTotal() {
+  let total = 0;
+  const breakdown = {};
+  CRITERIA.forEach(c => {
+    const sel = document.querySelector(`input[name="${c.id}"]:checked`);
+    const v = sel ? parseInt(sel.value) : 0;
+    total += v;
+    breakdown[c.id] = { area: c.area, score: v, max: c.weight };
+  });
+
+  document.getElementById('totalScore').textContent = total;
+  const { grade, label, color } = getGrade(total);
+  document.getElementById('totalGrade').innerHTML = `<span class="grade-badge grade-${grade}">${label}</span>`;
+  document.getElementById('totalGradeSub').textContent = getGradeSub(total);
+
+  const bd = document.getElementById('scoreBreakdown');
+  bd.innerHTML = CRITERIA.map(c => {
+    const s = breakdown[c.id];
+    return `<div class="sb-item"><div class="sb-area">${s.area}</div><div class="sb-score">${s.score}</div><div class="sb-max">/${s.max}</div></div>`;
+  }).join('');
+
+  renderInterpretation(total, breakdown);
+}
+
+function getGrade(score) {
+  if (score >= 90) return { grade:'A', label:'매우 잘함 (A)', color:'#15803d' };
+  if (score >= 75) return { grade:'B', label:'잘함 (B)', color:'#1d4ed8' };
+  if (score >= 60) return { grade:'C', label:'보통 (C)', color:'#92400e' };
+  return { grade:'D', label:'노력 필요 (D)', color:'#991b1b' };
+}
+function getGradeSub(score) {
+  if (score >= 90) return '주장과 근거가 매우 논리적으로 구성되었습니다.';
+  if (score >= 75) return '전반적으로 잘 구성되었으며 일부 보완이 필요합니다.';
+  if (score >= 60) return '기본 구조는 갖추었으나 근거 보강이 필요합니다.';
+  return '글의 구조와 근거 모두 추가 지도가 필요합니다.';
+}
+
+function renderInterpretation(total, breakdown) {
+  const scoreItems = CRITERIA.map(c => ({ ...c, score: breakdown[c.id].score }));
+  const strong = scoreItems.filter(c => c.score / c.weight >= 0.8);
+  const weak = scoreItems.filter(c => c.score / c.weight < 0.6);
+
+  const feedback = {
+    c1: { good: '문제 상황과 주장이 명확하게 서술되어 독자가 글의 방향을 바로 파악할 수 있습니다.', bad: '서론에서 문제 상황을 더 구체적으로 제시하거나, 주장을 한 문장으로 명확히 표현하는 연습이 필요합니다.' },
+    c2: { good: '2개 이상의 근거를 이유와 예시를 들어 설득력 있게 제시했습니다.', bad: '근거마다 "왜냐하면~" 이유와 "실제로~" 예시·자료를 함께 쓰는 연습이 필요합니다.' },
+    c3: { good: '근거가 주장과 논리적으로 연결되며 사실에 바탕을 두어 신뢰감을 줍니다.', bad: '근거가 주장과 어떻게 연결되는지 설명을 보완하고, "~인 것 같다" 대신 사실에 근거한 표현을 사용해보세요.' },
+    c4: { good: '본론을 요약하고 주장을 재강조하며 독자에게 행동을 촉구하는 마무리가 완성되었습니다.', bad: '결론에서 본론 요약 → 주장 재강조 → 행동 촉구의 세 단계를 모두 포함하도록 지도가 필요합니다.' },
+    c5: { good: '논리적인 어휘와 연결어(첫째/둘째, 따라서 등)를 적절히 활용하여 글의 흐름이 자연스럽습니다.', bad: '감정적 표현을 줄이고 "따라서, 그러므로, 또한" 등 논리적 연결어를 더 활용해보세요.' },
+  };
+
+  let html = '';
+
+  html += `<div style="margin-bottom:12px"><strong style="color:#1a3a5c">📌 종합 총평</strong></div>`;
+  html += `<div class="interp-comment">`;
+  html += `이 학생의 총점은 <strong>${total}점</strong>으로, ${getGradeSub(total)} `;
+  if (strong.length > 0) html += `특히 <strong>${strong.map(c=>c.area).join(', ')}</strong> 영역에서 우수한 실력을 보였습니다. `;
+  if (weak.length > 0) html += `<strong>${weak.map(c=>c.area).join(', ')}</strong> 영역의 보완이 필요합니다.`;
+  html += `</div>`;
+
+  if (strong.length > 0) {
+    html += `<div style="font-size:13px; font-weight:700; color:#15803d; margin:14px 0 6px">✅ 잘한 점</div>`;
+    html += `<div class="interp-comment strengths">` + strong.map(c => `<strong>[${c.area}]</strong> ${feedback[c.id].good}`).join('<br>') + `</div>`;
+  }
+  if (weak.length > 0) {
+    html += `<div style="font-size:13px; font-weight:700; color:#d97706; margin:14px 0 6px">💡 더 노력할 점</div>`;
+    html += `<div class="interp-comment improvements">` + weak.map(c => `<strong>[${c.area}]</strong> ${feedback[c.id].bad}`).join('<br>') + `</div>`;
+  }
+  if (strong.length === 0 && weak.length === 0) {
+    html += `<div class="interp-comment">모든 영역이 기본 수준을 충족했습니다. 각 영역을 조금씩 보완하면 더욱 완성도 높은 글이 될 것입니다.</div>`;
+  }
+
+  document.getElementById('interpContent').innerHTML = html;
+}
+
+function printResult() {
+  window.print();
+}
+
+function resetAll() {
+  if (!confirm('다른 학생 파일을 불러오겠습니까?')) return;
+  currentData = null;
+  document.getElementById('scoring-section').style.display = 'none';
+  document.getElementById('dropZone').style.display = 'block';
+  document.getElementById('fileInput').value = '';
+  document.getElementById('teacherComment').value = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
